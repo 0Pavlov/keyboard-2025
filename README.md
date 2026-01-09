@@ -2,15 +2,15 @@
 
 ![banner](https://m.media-amazon.com/images/I/81JlGvyThzL._AC_UF1000,1000_QL80_.jpg)
 
-# Choosing the Perfect Keyboard (IMHO)
+# Choosing the Perfect Keyboard (by my opinion)
 
 ***There are the best keyboard options by my opinion for late 2025.***
 I've watched a ton of videos, researched the topic, and came up with this list. The goal was to find the perfect balance between sound ("thock"), aesthetics, and customization potential.
 
 <div style="display: flex; justify-content: center;">
 
-[![Static Badge](https://img.shields.io/badge/VIEW_LIST-ENGLISH-7289da?style=for-the-badge&logo=html5&logoColor=white&link=https://YOUR_USERNAME.github.io/YOUR_REPO_NAME/index.html)](https://YOUR_USERNAME.github.io/YOUR_REPO_NAME/index.html)
-[![Static Badge](https://img.shields.io/badge/VIEW_LIST-RUSSIAN-ff4d4d?style=for-the-badge&logo=html5&logoColor=white&link=https://YOUR_USERNAME.github.io/YOUR_REPO_NAME/ru.html)](https://YOUR_USERNAME.github.io/YOUR_REPO_NAME/ru.html)
+[![Static Badge](https://img.shields.io/badge/VIEW_LIST-ENGLISH-7289da?style=for-the-badge&logo=html5&logoColor=white&link=https://0Pavlov.github.io/keyboard-2025/index.html)](https://0Pavlov.github.io/keyboard-2025/index.html)
+[![Static Badge](https://img.shields.io/badge/VIEW_LIST-RUSSIAN-ff4d4d?style=for-the-badge&logo=html5&logoColor=white&link=https://0Pavlov.github.io/keyboard-2025/ru.html)](https://0Pavlov.github.io/keyboard-2025/ru.html)
 
 </div>
 
