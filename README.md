@@ -9,8 +9,8 @@ I've watched a ton of videos, researched the topic, and came up with this list. 
 
 <div style="display: flex; justify-content: center;">
 
-[![Static Badge](https://img.shields.io/badge/VIEW_LIST-ENGLISH-7289da?style=for-the-badge&logo=html5&logoColor=white&link=https://0Pavlov.github.io/keyboard-2025/index.html)](https://0Pavlov.github.io/keyboard-2025/index.html)
-[![Static Badge](https://img.shields.io/badge/VIEW_LIST-RUSSIAN-ff4d4d?style=for-the-badge&logo=html5&logoColor=white&link=https://0Pavlov.github.io/keyboard-2025/ru.html)](https://0Pavlov.github.io/keyboard-2025/ru.html)
+[![Static Badge](https://img.shields.io/badge/OPEN_IN_BROWSER-ENGLISH-7289da?style=for-the-badge&logo=googlechrome&logoColor=white&link=https://0Pavlov.github.io/keyboard-2025/index.html)](https://0Pavlov.github.io/keyboard-2025/index.html)
+[![Static Badge](https://img.shields.io/badge/OPEN_IN_BROWSER-RUSSIAN-ff4d4d?style=for-the-badge&logo=googlechrome&logoColor=white&link=https://0Pavlov.github.io/keyboard-2025/ru.html)](https://0Pavlov.github.io/keyboard-2025/ru.html)
 
 </div>
 
