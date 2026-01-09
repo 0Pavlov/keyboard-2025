@@ -1,6 +1,6 @@
 <div align="center">
 
-![banner](https://m.media-amazon.com/images/I/81JlGvyThzL._AC_UF1000,1000_QL80_.jpg)
+![banner](https://m.media-amazon.com/images/I/81xPMTSQciL.jpg)
 
 # Choosing the Perfect Keyboard (by my opinion)
 
