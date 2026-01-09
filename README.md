@@ -4,8 +4,16 @@
 
 # Choosing the Perfect Keyboard (by my opinion)
 
-***There are the best keyboard options by my opinion for late 2025.***
-I've watched a ton of videos, researched the topic, and came up with this list. The goal was to find the perfect balance between sound ("thock"), aesthetics, and customization potential.
+    
+***These are the best mechanical keyboard options for late 2025, in my opinion.***
+
+I've watched a ton of videos, researched the topic, and put together this list. The goal was to find the perfect balance between sound ("thock"), aesthetics, and customization options. I've compiled this into a webpage featuring photos and sound tests.
+
+> The keyboards on this list are in the **$100** price range (There are cheaper options suitable for modding; the modded versions will come out to roughly the same price).
+
+The info and prices are current as of **early 2026**. Keyboards go on sale periodically, and prices can vary significantly across different platforms. Some keyboards have a wide variety of color options, so I recommend Googling the one you like yourself.
+
+<br>
 
 <div style="display: flex; justify-content: center;">
 
