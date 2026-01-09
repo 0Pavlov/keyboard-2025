@@ -9,8 +9,8 @@
 
 <div style="display: flex; justify-content: center;">
 
-[![Static Badge](https://img.shields.io/badge/СМОТРЕТЬ-ENGLISH-7289da?style=for-the-badge&logo=html5&logoColor=white&link=https://YOUR_USERNAME.github.io/YOUR_REPO_NAME/index.html)](https://YOUR_USERNAME.github.io/YOUR_REPO_NAME/index.html)
-[![Static Badge](https://img.shields.io/badge/СМОТРЕТЬ-RUSSIAN-ff4d4d?style=for-the-badge&logo=html5&logoColor=white&link=https://YOUR_USERNAME.github.io/YOUR_REPO_NAME/ru.html)](https://YOUR_USERNAME.github.io/YOUR_REPO_NAME/ru.html)
+[![Static Badge](https://img.shields.io/badge/ОТКРЫТЬ_В_БРАУЗЕРЕ-ENGLISH-7289da?style=for-the-badge&logo=googlechrome&logoColor=white&link=https://0Pavlov.github.io/keyboard-2025/index.html)](https://0Pavlov.github.io/keyboard-2025/index.html)
+[![Static Badge](https://img.shields.io/badge/ОТКРЫТЬ_В_БРАУЗЕРЕ-RUSSIAN-ff4d4d?style=for-the-badge&logo=googlechrome&logoColor=white&link=https://0Pavlov.github.io/keyboard-2025/ru.html)](https://0Pavlov.github.io/keyboard-2025/ru.html)
 
 </div>
 
@@ -45,4 +45,4 @@
 ## Как использовать:
 
   - **Вариант 1 (Рекомендуется):** Нажмите на бейджи выше, чтобы открыть интерактивную веб-страницу.
-  - **Вариант 2:** Скачайте файл `ru.html` и откройте его в браузере.
+  - **Вариант 2:** Скачайть файл `ru.html` и открыть его в браузере.
