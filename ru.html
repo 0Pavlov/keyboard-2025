@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⌨ Клавиатура</title>
+    
+    <style>
+        /* --- THEME VARIABLES --- */
+        :root {
+            --bg-body: #121212;
+            --bg-card: #1e1e1e;
+            --bg-card-border: #333;
+            --text-main: #e0e0e0;
+            --text-muted: #a0a0a0;
+            --accent: #7289da;
+            --accent-glow: rgba(114, 137, 218, 0.15);
+            --youtube-red: #ff4d4d;
+            --success: #4caf50;
+            --warning: #ff9800;
+            --warning-bg: rgba(255, 152, 0, 0.1);
+            --code-bg: #2d2d2d;
+            --radius: 12px;
+            --transition: 0.2s ease;
+        }
+
+        /* --- GLOBAL STYLES --- */
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* --- TYPOGRAPHY --- */
+        h1 {
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 15px;
+            margin-bottom: 10px;
+            color: #fff;
+            font-weight: 700;
+        }
+
+        p.subtitle {
+            color: var(--text-muted);
+            margin-bottom: 40px;
+            font-size: 1.1em;
+        }
+
+        h2 { margin: 0; font-size: 1.4em; color: #fff; }
+        
+        h3 { 
+            border-bottom: 1px solid var(--bg-card-border); 
+            padding-bottom: 8px; 
+            margin-top: 0; 
+            font-size: 1.1em; 
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* --- CARDS --- */
+        .card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--bg-card-border);
+            border-radius: var(--radius);
+            margin-bottom: 30px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: var(--transition);
+            opacity: 0; /* For animation */
+        }
+
+        .card:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .card-header {
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border-bottom: 1px solid var(--bg-card-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        /* --- MEDIA STAGE --- */
+        .media-stage {
+            width: 100%;
+            height: 0;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            position: relative;
+            background: #111; /* Slightly lighter than pure black for better contrast */
+            border-bottom: 1px solid var(--bg-card-border);
+            overflow: hidden; /* Ensures spinner doesn't spill out */
+        }
+
+        /* The Spinner (Pseudo-element) */
+        .media-stage::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 40px;
+            height: 40px;
+            margin: -20px 0 0 -20px; /* Center alignment */
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top: 3px solid var(--accent);
+            border-radius: 50%;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease;
+            z-index: 1;
+        }
+
+        /* Class to show spinner */
+        .media-stage.is-loading::after {
+            opacity: 1;
+            visibility: visible;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .media-stage img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0; /* Hidden by default */
+            transition: opacity 0.4s ease;
+            z-index: 2; /* Sits above the spinner */
+        }
+
+        /* Only show image when JS confirms it's loaded */
+        .media-stage img.loaded {
+            opacity: 1;
+        }
+
+        .keyboard-img {
+            width: 100%;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #333;
+            max-height: 400px;
+            object-fit: cover;
+        }
+
+        /* --- CONTROLS --- */
+        .control-bar {
+            display: flex;
+            gap: 10px;
+            padding: 12px 20px;
+            background: #181818;
+            border-bottom: 1px solid var(--bg-card-border);
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+        }
+
+        .control-bar::-webkit-scrollbar { height: 4px; }
+        .control-bar::-webkit-scrollbar-thumb { background: #444; border-radius: 2px; }
+
+        /* Shared style for Buttons and Links */
+        .control-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--bg-card-border);
+            color: var(--text-muted);
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.9em;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+            text-decoration: none; /* For <a> tags */
+            flex-shrink: 0;
+            user-select: none;
+        }
+
+        .control-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border-color: #555;
+            transform: translateY(-1px);
+        }
+
+        .control-btn.active-img {
+            background: var(--accent);
+            color: #fff;
+            border-color: var(--accent);
+        }
+        
+        .control-btn.video-link {
+            color: var(--youtube-red);
+            border-color: rgba(255, 77, 77, 0.3);
+            background: rgba(255, 77, 77, 0.05);
+        }
+
+        .control-btn.video-link:hover {
+            background: var(--youtube-red);
+            color: #fff;
+            border-color: var(--youtube-red);
+        }
+
+        /* --- CONTENT GRID --- */
+        .card-body { padding: 25px; }
+
+        .columns {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+
+        .col { flex: 1; min-width: 280px; }
+
+        /* --- LISTS --- */
+        ul { list-style-type: none; padding: 0; margin: 0; }
+        li { margin-bottom: 8px; padding-left: 25px; position: relative; }
+
+        .std-list > li::before { content: "•"; color: var(--accent); font-weight: bold; position: absolute; left: 0; font-size: 1.2em; line-height: 1; }
+        .pros > li::before { content: "✔"; color: var(--success); font-weight: bold; position: absolute; left: 0; }
+        .cons > li::before { content: "✖"; color: var(--youtube-red); font-weight: bold; position: absolute; left: 0; }
+
+        /* --- UTILS --- */
+        .price-badge {
+            background-color: var(--code-bg);
+            color: #ffbdba;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-family: 'Consolas', monospace;
+            font-size: 0.9em;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .conclusion-box {
+            border-left: 4px solid var(--warning);
+            background-color: var(--warning-bg);
+            padding: 15px;
+            margin-top: 25px;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .criteria-card { border-top: 4px solid var(--accent); }
+        .legend-card { border-top: 4px solid var(--success); }
+        .premium-card { border-top: 4px solid var(--accent); }
+
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid var(--bg-card-border);
+            font-size: 0.9em;
+            color: var(--text-muted);
+        }
+        
+        /* Animation */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in { animation: fadeInUp 0.6s ease forwards; }
+
+        /* --- LIGHTBOX (IMAGE VIEWER) --- */
+        /* Make images look clickable */
+        .media-stage img {
+            cursor: zoom-in;
+        }
+
+        /* The Overlay */
+        .lightbox-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px); /* Frosted glass effect */
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .lightbox-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* The Image Wrapper */
+        .lightbox-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 85%;
+            transform: scale(0.95);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); /* Bouncy pop effect */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .lightbox-overlay.active .lightbox-content {
+            transform: scale(1);
+        }
+
+        .lightbox-img {
+            max-width: 100%;
+            max-height: 85vh;
+            border-radius: var(--radius);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            object-fit: contain;
+            border: 1px solid var(--bg-card-border);
+        }
+
+        /* Caption */
+        .lightbox-caption {
+            margin-top: 15px;
+            color: var(--text-main);
+            font-size: 1.1em;
+            font-weight: 600;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: 0.3s ease 0.1s;
+        }
+
+        .lightbox-overlay.active .lightbox-caption {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Close Button */
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            
+            /* Box Styles */
+            width: 44px;
+            height: 44px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--bg-card-border);
+            border-radius: 50%;
+            
+            /* Hides the actual text character so we can draw a perfect X */
+            font-size: 0; 
+            
+            /* Layout */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            
+            /* Transition & Layering */
+            transition: var(--transition);
+            z-index: 10001;
+            
+            /* Important: We define the color here to inherit it in the ::before/::after */
+            color: var(--text-main); 
+
+            /* Remove tap boxes on mobile */
+            -webkit-tap-highlight-color: transparent; /* Removes the gray/blue box on tap */
+            outline: none; /* Removes focus ring */
+        }
+
+        /* Create the X using CSS lines instead of a Font */
+        .lightbox-close::before,
+        .lightbox-close::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;  /* Length of the X lines */
+            height: 2px;  /* Thickness of the X lines */
+            background-color: currentColor; /* Uses the parent's color */
+            border-radius: 2px;
+            /* Remove tap boxes on mobile */
+            -webkit-tap-highlight-color: transparent; /* Removes the gray/blue box on tap */
+            outline: none; /* Removes focus ring */
+        }
+
+        /* Rotate the first line 45 degrees */
+        .lightbox-close::before {
+            transform: translate(-50%, -50%) rotate(45deg);
+            /* Remove tap boxes on mobile */
+            -webkit-tap-highlight-color: transparent; /* Removes the gray/blue box on tap */
+            outline: none; /* Removes focus ring */
+        }
+
+        /* Rotate the second line -45 degrees */
+        .lightbox-close::after {
+            transform: translate(-50%, -50%) rotate(-45deg);
+            /* Remove tap boxes on mobile */
+            -webkit-tap-highlight-color: transparent; /* Removes the gray/blue box on tap */
+            outline: none; /* Removes focus ring */
+        }
+
+        /* Hover Effects */
+        .lightbox-close:hover {
+            background: var(--youtube-red);
+            color: white; /* This changes the X color due to currentColor */
+            border-color: var(--youtube-red);
+            
+            /* Rotates the whole container 90 degrees */
+            transform: rotate(90deg);
+            /* Remove tap boxes on mobile */
+            -webkit-tap-highlight-color: transparent; /* Removes the gray/blue box on tap */
+            outline: none; /* Removes focus ring */
+        }
+
+
+        /* Body Lock */
+        body.no-scroll {
+            overflow: hidden;
+        }
+
+        @media (max-width: 768px) {
+            .lightbox-img { width: 100%; }
+            .lightbox-close { top: 15px; right: 15px; background: rgba(0,0,0,0.5); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <h1 class="fade-in" style="animation-delay: 0s;">Выбор идеальной клавиатуры (по-моему мнению)</h1>
+    <p class="subtitle fade-in" style="animation-delay: 0.1s;">Сравнение претендентов, анализ плюсов, минусов и потенциала для моддинга.</p>
+
+    <!-- CRITERIA -->
+    <div class="card criteria-card fade-in" style="animation-delay: 0.2s;">
+        <div class="card-header">
+            <h2>Критерии выбора</h2>
+        </div>
+        <div class="card-body">
+            <ul class="std-list">
+                <li><strong>Приятный звук («Thocky» / «Creamy»)</strong></li>
+                <li><strong>Потенциал для кастомизации позже (Hotswap):</strong>
+                    <ul class="std-list" style="margin-top: 5px; font-size: 0.9em;">
+                        <li>Сменные свитчи (keygeek y2 / y3)</li>
+                        <li>Приличный / большой выбор кейкапов</li>
+                    </ul>
+                </li>
+                <li><strong>Поддержка разных типов подключения:</strong>
+                    <ul class="std-list" style="margin-top: 5px; font-size: 0.9em;">
+                        <li>Bluetooth, Радиоканал (USB донгл), Провод.</li>
+                    </ul>
+                </li>
+                <li><strong>Наличие F-клавиш</strong></li>
+                <li><strong>Крутой внешний вид корпуса:</strong> единственное, что я не хочу менять потом.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- AULA 75 -->
+    <div class="card fade-in" style="animation-delay: 0.3s;">
+        <div class="card-header">
+            <h2>AULA 75 <span class="price-badge">~3900₽</span></h2>
+        </div>
+        
+        <div class="media-stage">
+            <img src="https://m.media-amazon.com/images/I/61EtsD0mfLL.jpg" alt="AULA 75">
+        </div>
+        <div class="control-bar">
+            <button class="control-btn active-img">📷 Фото</button>
+            <a href="https://youtu.be/TcMG9FItrFw?t=725" target="_blank" class="control-btn video-link">▶ Звук из коробки (youtube)</a>
+            <a href="https://youtu.be/vrx1TmIT_OI?t=70" target="_blank" class="control-btn video-link">▶ Звук после модификации (youtube)</a>
+        </div>
+
+        <div class="card-body">
+            <div class="columns">
+                <div class="col">
+                    <h3>Плюсы</h3>
+                    <ul class="pros">
+                        <li>Классно выглядящий корпус</li>
+                        <li>Есть роллер громкости (ощущается дешевым)</li>
+                        <li>Дешевая цена</li>
+                        <li>Кастомизируемая (выбор сообщества для кастома до $100)</li>
+                        <li>Нормальная расцветка из коробки (кейкапы)</li>
+                    </ul>
+                </div>
+                <div class="col">
+                    <h3>Минусы</h3>
+                    <ul class="cons">
+                        <li>Пластиковый корпус</li>
+                        <li>Требует моддинга сразу (свитчи, смазка)</li>
+                        <li>Большая</li>
+                        <li>Стоковые кейкапы не просвечивают символы (не светятся в темноте)</li>
+                        <li>Нет винтов для разборки (корпус нужно вскрывать поддеванием, риск повредить)</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="conclusion-box">
+                <strong>Вывод:</strong> Норм из коробки, дешевая, можно кастомизировать, большая.
+            </div>
+        </div>
+    </div>
+
+    <!-- AULA S75 Pro -->
+    <div class="card fade-in" style="animation-delay: 0.4s;">
+        <div class="card-header">
+            <h2>AULA S75 Pro <span class="price-badge">~4900₽</span></h2>
+        </div>
+        
+        <div class="media-stage">
+            <img src="https://m.media-amazon.com/images/I/61JV5T8ExwL.jpg" alt="AULA S75 Pro">
+        </div>
+        <div class="control-bar">
+            <button class="control-btn active-img">📷 Фото</button>
+            <a href="https://youtu.be/TcMG9FItrFw?t=725" target="_blank" class="control-btn video-link">▶ Звук из коробки (youtube)</a>
+            <a href="https://youtu.be/vrx1TmIT_OI?t=70" target="_blank" class="control-btn video-link">▶ Звук после модификации (youtube)</a>
+        </div>
+        
+        <div class="card-body">
+            <div class="columns">
+                <div class="col">
+                    <h3>Плюсы</h3>
+                    <ul class="pros">
+                        <li>Роллер громкости</li>
+                        <li>Корпус выглядит лучше базовой версии AULA</li>
+                        <li>Кастомизируемая</li>
+                        <li>Нормальная расцветка</li>
+                        <li>Есть экран</li>
+                        <li>Более новая модель</li>
+                        <li>Дешевая</li>
+                    </ul>
+                </div>
+                <div class="col">
+                    <h3>Минусы</h3>
+                    <ul class="cons">
+                        <li>Есть экран (эстетически предпочитаю базовую AULA)</li>
+                        <li>Требует моддинга сразу (свитчи, смазка)</li>
+                        <li>Большая</li>
+                        <li>Стоковые кейкапы не просвечивают символы (не светятся в темноте)</li>
+                        <li>Пластиковый корпус</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="conclusion-box">
+                <strong>Вывод:</strong> Норм из коробки, дешевая, можно кастомизировать, большая, уродливый экран.
+            </div>
+        </div>
+    </div>
+
+    <!-- Royal Kludge M75 -->
+    <div class="card fade-in" style="animation-delay: 0.5s;">
+        <div class="card-header">
+            <h2>Royal Kludge M75</h2>
+        </div>
+        
+        <div class="media-stage">
+            <img src="https://m.media-amazon.com/images/I/61OqVEiL1FL.jpg" alt="RK M75">
+        </div>
+        <div class="control-bar">
+            <button class="control-btn active-img">📷 Фото</button>
+            <a href="https://youtu.be/TcMG9FItrFw?t=736" target="_blank" class="control-btn video-link">▶ Звук из коробки (youtube)</a>
+            <a href="https://youtu.be/vrx1TmIT_OI?t=70" target="_blank" class="control-btn video-link">▶ Звук после модификации можно сделать как AULA (youtube)</a>
+        </div>
+        
+        <div class="card-body">
+            <div class="columns">
+                <div class="col">
+                    <h3>Плюсы</h3>
+                    <ul class="pros">
+                        <li>Выглядит лучше AULA PRO (экран не кринж)</li>
+                        <li>Более качественный роллер громкости</li>
+                        <li>Прямой конкурент AULA, который превосходит её</li>
+                    </ul>
+                </div>
+                <div class="col">
+                    <h3>Минусы</h3>
+                    <ul class="cons">
+                        <li>Тяжело разбирается (так же как AULA)</li>
+                        <li>Пластик</li>
+                        <li>В два раза дороже AULA, но все еще бюджетная (не алюминий)</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="conclusion-box">
+                <strong>Вывод:</strong> Брать её вместо AULA, если нравится такой форм-фактор.
+            </div>
+        </div>
+    </div>
+
+    <!-- NuPhy Air75 V3 -->
+    <div class="card fade-in" style="animation-delay: 0.6s;">
+        <div class="card-header">
+            <h2>NuPhy Air75 V3</h2>
+        </div>
+        
+        <div class="media-stage">
+            <img src="https://nuphy.com/cdn/shop/files/Main03_85272a42-ffdc-4d95-baab-46a8d00efd32_1600x.jpg?v=1766711338" alt="NuPhy Air75">
+        </div>
+        <div class="control-bar">
+            <button class="control-btn active-img">📷 Фото</button>
+            <a href="https://www.youtube.com/shorts/xPxRSVnXYNk?feature=share" target="_blank" class="control-btn video-link">▶ Звук из коробки (youtube)</a>
+            <a href="https://youtu.be/-ANpduG6mmg?t=411" target="_blank" class="control-btn video-link">▶ Опции по кастомизации (youtube)</a>
+        </div>
+        
+        <div class="card-body">
+            <div class="columns">
+                <div class="col">
+                    <h3>Плюсы</h3>
+                    <ul class="pros">
+                        <li>Выглядит вроде норм из коробки (почти скучно)</li>
+                        <li>Есть роллер громкости (3 штуки в комплекте, сменные)</li>
+                        <li>Звук тайпинга отличный из коробки (thock / creamy)</li>
+                        <li>Опция с тихими свитчами в комплекте</li>
+                        <li>В комплекте прикольные кейкапы с цветами Google и котом</li>
+                        <li>Низкопрофильная, тонкая, легко помещается в рюкзак</li>
+                        <li>Алюминиевый корпус (ощущается премиально)</li>
+                    </ul>
+                </div>
+                <div class="col">
+                    <h3>Минусы</h3>
+                    <ul class="cons">
+                        <li>Почти не кастомизируется:
+                            <ul class="std-list" style="margin-top: 5px; font-size: 0.9em;">
+                                <li>Просвечивающие кейкапы стоят $35</li>
+                                <li>Только Low Profile свитчи</li>
+                            </ul>
+                        </li>
+                        <li>Стоковые кейкапы не просвечивают символы (не светятся в темноте)</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="conclusion-box">
+                <strong>Вывод:</strong> Хороша из коробки, останется такой навсегда, тонкая.
+            </div>
+        </div>
+    </div>
+
+    <!-- NuPhy Kick75 -->
+    <div class="card fade-in" style="animation-delay: 0.7s;">
+        <div class="card-header">
+            <h2>NuPhy Kick75</h2>
+        </div>
+        
+        <div class="media-stage" id="stage-kick75">
+            <img src="https://nuphy.com/cdn/shop/files/Kick75_Main01_v3_1800x1800.jpg?v=1766711868" alt="Kick75 Front">
+        </div>
+        <div class="control-bar">
+            <!-- JavaScript Image Swapping -->
+            <button class="control-btn active-img" onclick="swapImage('stage-kick75', 'https://nuphy.com/cdn/shop/files/Kick75_Main01_v3_1800x1800.jpg?v=1766711868', this)">📷 Фото 1</button>
+            <button class="control-btn" onclick="swapImage('stage-kick75', 'https://sun9-45.userapi.com/s/v1/ig2/9TNb9VxWx5Kenn0MpBCqUp4sy1Tr0-8-L3sxnhmIbPGf6bAUyviV5ViKKFPxUsKxyPHT9hWslmTWL5lkFeZ-bSJX.jpg?quality=95&as=32x20,48x30,72x45,108x67,160x99,240x148,360x223,480x297,540x334,640x396,720x445,1080x668,1200x742&from=bu&cs=1200x0', this)">📷 Фото 2</button>
+            
+            <a href="https://youtu.be/3N-LGmgo5wU?t=593" target="_blank" class="control-btn video-link">▶ Звук из коробки (youtube)</a>
+        </div>
+        
+        <div class="card-body">
+            <div class="columns">
+                <div class="col">
+                    <h3>Плюсы</h3>
+                    <ul class="pros">
+                        <li>Уникальный ретро вид / стиль обуви Nike</li>
+                        <li>Есть роллер громкости</li>
+                        <li>Хороший «thocky» звук из коробки</li>
+                        <li>Есть версии с низким и высоким профилем</li>
+                        <li>Конвертируется из низкой в высокую (кит за $20)</li>
+                        <li>Поддерживает кастомные свитчи (но только их Low Profile)</li>
+                    </ul>
+                </div>
+                <div class="col">
+                    <h3>Минусы</h3>
+                    <ul class="cons">
+                        <li>Дизайн «на любителя» (специфичный), клавиатура будет выглядеть определенным образом даже после кастома</li>
+                        <li>Экосистема NuPhy (только их LP свитчи, conversion kit и LP кейкапы)</li>
+                        <li>ИХ КАСТОМНЫЕ ЛОУ ПРОФАЙЛ КЕЙКАПЫ СТОЯТ ПО $25-30 (ГРАБЕЖ)</li>
+                        <li>Пластиковый корпус, выглядит игрушечно</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="conclusion-box">
+                <strong>Вывод:</strong> Уникальный вид (может надоесть, что сложно исправить), хороший звук, низкая кастомизация.
+            </div>
+        </div>
+    </div>
+
+    <!-- Rainy 75 Pro -->
+    <div class="card legend-card fade-in" style="animation-delay: 0.8s;">
+        <div class="card-header">
+            <h2>Rainy 75 Pro <span class="price-badge" style="background-color: var(--success); color: white; border: none;">Легенда</span></h2>
+        </div>
+        
+        <div class="media-stage" id="stage-rainy75">
+            <img src="https://m.media-amazon.com/images/I/81JlGvyThzL._AC_UF1000,1000_QL80_.jpg" alt="Rainy 75 Front">
+        </div>
+        <div class="control-bar">
+            <button class="control-btn active-img" onclick="swapImage('stage-rainy75', 'https://m.media-amazon.com/images/I/81JlGvyThzL._AC_UF1000,1000_QL80_.jpg', this)">📷 Фото 1</button>
+            <button class="control-btn" onclick="swapImage('stage-rainy75', 'https://m.media-amazon.com/images/I/81xPMTSQciL.jpg', this)">📷 Фото 2</button>
+            
+            <a href="https://youtu.be/xI6wbhqm3Bc?t=736" target="_blank" class="control-btn video-link">▶ Звук из коробки (youtube)</a>
+            <a href="https://youtu.be/2eQa2Kd3DHE?t=6" target="_blank" class="control-btn video-link">▶ Звук после модов может быть любым (youtube)</a>
+        </div>
+        
+        <div class="card-body">
+            <div class="columns">
+                <div class="col">
+                    <h3>Плюсы</h3>
+                    <ul class="pros">
+                        <li>Абсолютно шикарный корпус (CNC алюминий) с красивой пластиной на дне и милым облачком спереди</li>
+                        <li>Выглядит достойно из коробки (стандартные кейкапы)</li>
+                        <li>Нормальный звук из коробки</li>
+                        <li>Высочайшая кастомизируемость (выбор сообщества 1-2 года назад)</li>
+                    </ul>
+                </div>
+                <div class="col">
+                    <h3>Минусы</h3>
+                    <ul class="cons">
+                        <li>Реально старая модель (может влиять на софт, батарею, качество соединения)</li>
+                        <li>Уродливая красная плата под клавишами</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="conclusion-box">
+                <strong>Вывод:</strong> Красивая, требует кастомизации сразу же (свитчи, смазка, возможно кейкапы), большая, старые технологии.
+            </div>
+        </div>
+    </div>
+
+    <!-- LOFREE 85 -->
+    <div class="card fade-in" style="animation-delay: 0.9s;">
+        <div class="card-header">
+            <h2>LOFREE 85</h2>
+        </div>
+        
+        <div class="media-stage">
+            <img src="https://m.media-amazon.com/images/I/61Vrjw2AIvL.jpg" alt="Lofree 85">
+        </div>
+        <div class="control-bar">
+            <button class="control-btn active-img">📷 Фото</button>
+            <a href="https://youtu.be/Bdj8NJhbdwM?t=507" target="_blank" class="control-btn video-link">▶ Звук из коробки (youtube)</a>
+        </div>
+
+        <div class="card-body">
+            <div class="columns">
+                <div class="col">
+                    <h3>Плюсы</h3>
+                    <ul class="pros">
+                        <li>Минимализм, ничего лишнего</li>
+                        <li>Нормальный звук из коробки</li>
+                        <li>Низкопрофильная, тонкая, легко помещается в рюкзак</li>
+                        <li>Крутая подсветка стола снизу клавиатуры</li>
+                        <li>Алюминиевый корпус (ощущается премиально)</li>
+                        <li>Нормальные кейкапы с просвечивающими символами</li>
+                    </ul>
+                </div>
+                <div class="col">
+                    <h3>Минусы</h3>
+                    <ul class="cons">
+                        <li>Странная вставка с логотипом LOFREE сбоку</li>
+                        <li>Сомнительное дно</li>
+                        <li>Почти не кастомизируется:
+                            <ul class="std-list" style="margin-top: 5px; font-size: 0.9em;">
+                                <li>Стандартные кейкапы выглядят странно, почти дешево</li>
+                                <li>Подходят только низкопрофильные свитчи</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="conclusion-box">
+                <strong>Вывод:</strong> Солидный вариант "как есть", тонкая, низкопрофильная, дизайн норм.
+            </div>
+        </div>
+    </div>
+
+    <!-- EVOWORKS Evo75 -->
+    <div class="card premium-card fade-in" style="animation-delay: 1.0s;">
+        <div class="card-header">
+            <h2>EVOWORKS Evo75 <span class="price-badge" style="background-color: var(--accent); color: white; border: none;">Премиум</span></h2>
+        </div>
+        
+        <div class="media-stage">
+            <img src="https://divinikey.com/cdn/shop/files/evoworks-evo75-keyboard-7541310.webp?v=1753398143&width=1214" alt="Evo 75">
+        </div>
+        <div class="control-bar">
+            <button class="control-btn active-img">📷 Фото</button>
+            <a href="https://youtu.be/TayergdETCk?t=320" target="_blank" class="control-btn video-link">▶ Звук из коробки (youtube)</a>
+        </div>
+        
+        <div class="card-body">
+            <div class="columns">
+                <div class="col">
+                    <h3>Плюсы</h3>
+                    <ul class="pros">
+                        <li>Красивый Full-Aluminum корпус</li>
+                        <li>Крутой «thocky» звук из коробки (вариант с Rye свитчами и PP платой)</li>
+                        <li>Очень крутой дизайн с приятным LED возле Esc</li>
+                        <li>Крутой джойстик справа</li>
+                        <li>Высокая кастомизируемость</li>
+                    </ul>
+                </div>
+                <div class="col">
+                    <h3>Минусы</h3>
+                    <ul class="cons">
+                        <li>Самый дорогой вариант среди всех</li>
+                        <li>Скорее всего нужно заменить свитчи на keygeek v2 / v3 или другие thocky</li>
+                        <li>Требует смазки и доработки стабов</li>
+                        <li>Самая тяжелая (2 кг)</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="conclusion-box">
+                <strong>Вывод:</strong> Самый премиальный вариант с несущественными минусами, дорогая, очень хороший "не кричащий" дизайн, так что можно кастомизировать по-разному, обновляя внешний вид со временем.
+            </div>
+        </div>
+    </div>
+
+    <!-- PMO wave 75 -->
+    <div class="card fade-in" style="animation-delay: 1.1s;">
+        <div class="card-header">
+            <h2>PMO wave 75</h2>
+        </div>
+        
+        <div class="media-stage" id="stage-pmowave">
+            <img src="https://www.nouvolo.com/cdn/shop/files/wave75-black_a7924230-a5a2-4bae-ac21-433393cddf84_730x.jpg?v=1729493843" alt="PMO Wave Black">
+        </div>
+        <div class="control-bar">
+            <button class="control-btn active-img" onclick="swapImage('stage-pmowave', 'https://www.nouvolo.com/cdn/shop/files/wave75-black_a7924230-a5a2-4bae-ac21-433393cddf84_730x.jpg?v=1729493843', this)">📷 Фото 1</button>
+            <button class="control-btn" onclick="swapImage('stage-pmowave', 'https://www.nouvolo.com/cdn/shop/files/wave75-colors.jpg?v=1752810437&width=1445', this)">📷 Фото 2</button>
+            
+            <a href="https://youtu.be/1qVBwNfAqGc?t=593" target="_blank" class="control-btn video-link">▶ Звук из коробки (youtube)</a>
+        </div>
+
+        <div class="card-body">
+            <div class="columns">
+                <div class="col">
+                    <h3>Плюсы</h3>
+                    <ul class="pros">
+                        <li>По сути современная версия Rainy75</li>
+                        <li>Логотип с подсветкой справа (облако Rainy75 не светится)</li>
+                        <li>Высокая кастомизируемость</li>
+                        <li>Дизайн минималистичный, так что вид клавиатуры сильно зависит от разных кейкапов</li>
+                        <li>Батарея и связь лучше Rainy, потому что новее</li>
+                    </ul>
+                </div>
+                <div class="col">
+                    <h3>Минусы</h3>
+                    <ul class="cons">
+                        <li>Нет "шедевра" на дне как у Rainy75 Pro</li>
+                        <li>Хочет замены свитчей прямо из коробки</li>
+                        <li>Тяжелая</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="conclusion-box">
+                <strong>Вывод:</strong> Прямой конкурент Rainy, с более современной начинкой, подсвеченным акцентом спереди, но без шедевра на дне.
+            </div>
+        </div>
+    </div>
+
+    <!-- Melgeek O2 -->
+    <div class="card fade-in" style="animation-delay: 1.2s;">
+        <div class="card-header">
+            <h2>Melgeek O2</h2>
+        </div>
+        
+        <div class="media-stage">
+            <img src="https://m.media-amazon.com/images/I/51jjXFvE8DL._AC_UF1000,1000_QL80_.jpg" alt="Melgeek O2" style="object-fit:contain;">
+        </div>
+        <div class="control-bar">
+            <button class="control-btn active-img">📷 Фото</button>
+            <a href="https://youtu.be/Bdj8NJhbdwM?t=402" target="_blank" class="control-btn video-link">▶ Звук из коробки (youtube)</a>
+        </div>
+
+        <div class="card-body">
+            <div class="columns">
+                <div class="col">
+                    <h3>Плюсы</h3>
+                    <ul class="pros">
+                        <li>Минималистичный дизайн (нравится больше всех среди Low Profile)</li>
+                        <li>Низкопрофильная</li>
+                        <li>«Creamy» звук (смесь thock и cream, довольно тихий)</li>
+                        <li>Клевый LED справа</li>
+                        <li>Легкая</li>
+                        <li>Реально хорошие кейкапы из коробки</li>
+                        <li>Дополнительные кейкапы с пчелками</li>
+                    </ul>
+                </div>
+                <div class="col">
+                    <h3>Минусы</h3>
+                    <ul class="cons">
+                        <li>Нет кейкапов с просвечивающими символами</li>
+                        <li>Пластиковый корпус (в данном случае не особый минус)</li>
+                        <li>Никакой кастомизации</li>
+                        <li>Неразборная вообще</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="conclusion-box">
+                <strong>Вывод:</strong> Реально отличный выбор низкопрофильной клавиатуры для использования "как есть" без кастомизации — солидно.
+            </div>
+        </div>
+    </div>
+
+    <!-- YUNZII AL80 -->
+    <div class="card fade-in" style="animation-delay: 1.3s;">
+        <div class="card-header">
+            <h2>YUNZII AL80</h2>
+        </div>
+        
+        <div class="media-stage">
+            <img src="https://www.yunzii.com/cdn/shop/files/1-3_607bec86-a714-4584-9162-efd73149d81c.jpg?crop=center&height=1500&v=1737690402&width=1500" alt="Yunzii">
+        </div>
+        <div class="control-bar">
+            <button class="control-btn active-img">📷 Фото</button>
+            <a href="https://www.youtube.com/shorts/Apb7fcQ5TJs?t=36&feature=share" target="_blank" class="control-btn video-link">▶ Звук из коробки (youtube)</a>
+        </div>
+
+        <div class="card-body">
+            <p>По сути <strong>AULA PRO</strong>, всё вышесказанное применимо и к ней, но экран менее уродливый.</p>
+        </div>
+    </div>
+
+    <footer>
+        <p>Сравнение составлено на основе личных предпочтений.<br>Данные актуальны на конец 2025 года.</p>
+    </footer>
+
+</div>
+
+<script>
+    // --- GLOBAL SWAP FUNCTION ---
+    // This function now preloads the image before showing it to prevent black boxes
+    function swapImage(stageId, src, btn) {
+        const stage = document.getElementById(stageId);
+        const img = stage.querySelector('img');
+        
+        // Update Button Styling
+        const btns = btn.parentElement.querySelectorAll('.control-btn');
+        btns.forEach(b => {
+            if(!b.classList.contains('video-link')) {
+                b.classList.remove('active-img');
+            }
+        });
+        btn.classList.add('active-img');
+
+        // Prepare for swap
+        // Hide current image immediately
+        img.classList.remove('loaded');
+        // Show the spinner
+        stage.classList.add('is-loading');
+
+        // Preload the new image in memory
+        const tempLoader = new Image();
+        tempLoader.src = src;
+
+        // Only update the DOM when the download is finished
+        tempLoader.onload = () => {
+            img.src = src;
+            // Slight delay to ensure DOM update is registered before fading in
+            requestAnimationFrame(() => {
+                stage.classList.remove('is-loading'); // Hide spinner
+                img.classList.add('loaded');          // Fade image in
+            });
+        };
+
+        // Safety fallback: if image fails, remove spinner so it doesn't spin forever
+        tempLoader.onerror = () => {
+            stage.classList.remove('is-loading');
+            alert('Не удалось загрузить изображение');
+        };
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+
+        // --- INITIAL PAGE LOAD LOGIC ---
+        // Handle images that are loading when the website is first opened
+        const allStageImages = document.querySelectorAll('.media-stage img');
+        
+        allStageImages.forEach(img => {
+            const stage = img.closest('.media-stage');
+            if(!stage) return;
+
+            // Helper to reveal image
+            const reveal = () => {
+                stage.classList.remove('is-loading');
+                img.classList.add('loaded');
+            };
+
+            // Check if browser already has the image cached
+            if (img.complete && img.naturalHeight !== 0) {
+                reveal();
+            } else {
+                // Not loaded yet? Show spinner
+                stage.classList.add('is-loading');
+                // Wait for it
+                img.onload = reveal;
+                img.onerror = () => stage.classList.remove('is-loading');
+            }
+        });
+
+
+        // --- LIGHTBOX SETUP ---
+        const lightboxHTML = `
+            <div id="lightbox" class="lightbox-overlay">
+                <button class="lightbox-close">&times;</button>
+                <div class="lightbox-content">
+                    <img src="" alt="" class="lightbox-img">
+                </div>
+                <div class="lightbox-caption"></div>
+            </div>
+        `;
+        document.body.insertAdjacentHTML('beforeend', lightboxHTML);
+
+        const lightbox = document.getElementById('lightbox');
+        const lbImg = lightbox.querySelector('.lightbox-img');
+        const lbCaption = lightbox.querySelector('.lightbox-caption');
+        const closeBtn = lightbox.querySelector('.lightbox-close');
+        
+        // Open Function
+        const openLightbox = (src, alt) => {
+            lbImg.src = src;
+            lbCaption.textContent = alt || '';
+            lightbox.classList.add('active');
+            document.body.classList.add('no-scroll');
+        };
+
+        // Close Function
+        const closeLightbox = () => {
+            lightbox.classList.remove('active');
+            setTimeout(() => {
+                lbImg.src = ''; 
+                document.body.classList.remove('no-scroll');
+            }, 300);
+        };
+
+        // --- LIGHTBOX EVENTS (USING DELEGATION) ---
+        // Using delegation allows this to work even if we manipulate the DOM later
+        document.querySelectorAll('.media-stage').forEach(stage => {
+            stage.addEventListener('click', (e) => {
+                if(e.target.tagName === 'IMG') {
+                    const currentSrc = e.target.src;
+                    
+                    // Find Caption
+                    const card = e.target.closest('.card');
+                    let captionText = e.target.alt;
+                    
+                    if(card) {
+                        const title = card.querySelector('h2');
+                        if(title) {
+                            // Clean text (remove badges/HTML inside H2)
+                            captionText = title.childNodes[0].textContent.trim(); 
+                        }
+                    }
+                    openLightbox(currentSrc, captionText);
+                }
+            });
+        });
+
+        // Close Events
+        closeBtn.addEventListener('click', closeLightbox);
+        
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox || e.target.closest('.lightbox-content') === null) {
+                closeLightbox();
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && lightbox.classList.contains('active')) {
+                closeLightbox();
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
